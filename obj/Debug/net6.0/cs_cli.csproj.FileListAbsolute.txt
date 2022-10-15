@@ -1,0 +1,15 @@
+/home/alaffu/dev/school/cs_cli/bin/Debug/net6.0/cs_cli
+/home/alaffu/dev/school/cs_cli/bin/Debug/net6.0/cs_cli.deps.json
+/home/alaffu/dev/school/cs_cli/bin/Debug/net6.0/cs_cli.runtimeconfig.json
+/home/alaffu/dev/school/cs_cli/bin/Debug/net6.0/cs_cli.dll
+/home/alaffu/dev/school/cs_cli/bin/Debug/net6.0/ref/cs_cli.dll
+/home/alaffu/dev/school/cs_cli/bin/Debug/net6.0/cs_cli.pdb
+/home/alaffu/dev/school/cs_cli/obj/Debug/net6.0/cs_cli.csproj.AssemblyReference.cache
+/home/alaffu/dev/school/cs_cli/obj/Debug/net6.0/cs_cli.GeneratedMSBuildEditorConfig.editorconfig
+/home/alaffu/dev/school/cs_cli/obj/Debug/net6.0/cs_cli.AssemblyInfoInputs.cache
+/home/alaffu/dev/school/cs_cli/obj/Debug/net6.0/cs_cli.AssemblyInfo.cs
+/home/alaffu/dev/school/cs_cli/obj/Debug/net6.0/cs_cli.csproj.CoreCompileInputs.cache
+/home/alaffu/dev/school/cs_cli/obj/Debug/net6.0/cs_cli.dll
+/home/alaffu/dev/school/cs_cli/obj/Debug/net6.0/ref/cs_cli.dll
+/home/alaffu/dev/school/cs_cli/obj/Debug/net6.0/cs_cli.pdb
+/home/alaffu/dev/school/cs_cli/obj/Debug/net6.0/cs_cli.genruntimeconfig.cache
