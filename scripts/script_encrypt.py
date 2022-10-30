@@ -1,6 +1,5 @@
 import base64
 import os
-import sys
 import pathlib
 
 from cryptography.fernet import Fernet
@@ -96,7 +95,7 @@ def get_parent_path(path):
 def main():
     ABSOLUTE_DIRECTORY_PATH = get_absolute_path()
     THIS_SCRIPT_PATH = str(ABSOLUTE_DIRECTORY_PATH) + '/scripts'
-    FILE_KEY = THIS_SCRIPT_PATH + "filekey.key"
+    FILE_KEY = THIS_SCRIPT_PATH + "/filekey.key"
 
     # PARENT_DIRECTORY_PATH = get_parent_path(CURRENT_DIRECTORY_PATH)
 
