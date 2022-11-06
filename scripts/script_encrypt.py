@@ -8,11 +8,6 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 
 def get_key_by_password(password):
-    '''
-        Pass password if you want to get the fernet key using a password
-        or if you want to save a random fernet key to an file just pass the file_path to where
-        it will be saved
-    '''
     salt = os.urandom(16);
 
     kdf = PBKDF2HMAC(
@@ -38,7 +33,7 @@ def get_key_from_file(file_path):
     return key
 
 
-def encrypt_file(file_path, filekey=None, password=None):
+def encrypt_file(file_path, filekey=None):
     text_file_to_encrypt = file_path
     FILE_KEY = filekey
 
