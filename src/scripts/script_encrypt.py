@@ -162,10 +162,10 @@ def password_method_handler(text_file_to_encrypt, password):
 
 def main():
     ABSOLUTE_DIRECTORY_PATH = get_absolute_path()
-    THIS_SCRIPT_PATH = str(ABSOLUTE_DIRECTORY_PATH) + '/scripts'
+    THIS_SCRIPT_PATH = str(ABSOLUTE_DIRECTORY_PATH) + '/src/scripts'
     FILE_KEY = THIS_SCRIPT_PATH + "/filekey.key"
 
-    TEXT_FILE_TO_ENCRYPT = str(ABSOLUTE_DIRECTORY_PATH) + '/test_files/simple_text_file.txt'
+    TEXT_FILE_TO_ENCRYPT = str(ABSOLUTE_DIRECTORY_PATH) + '/src/tests/text.txt'
 
     password = b"teste"
 
