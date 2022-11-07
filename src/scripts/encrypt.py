@@ -22,10 +22,10 @@ class Encrypt:
         return key
 
     def create_key_by_file(self, file_path):
-            key = Fernet.generate_key()
-            with open(file_path, "wb") as filekey:
-                filekey.write(key)
-            return key
+        key = Fernet.generate_key()
+        with open(file_path, "wb") as filekey:
+            filekey.write(key)
+        return key
 
 
     def get_key_from_file(self, file_path):
@@ -72,6 +72,8 @@ class Encrypt:
     def get_size_file(self, file_path):
         return os.path.getsize(file_path)
 
+    def get_current_path(self):
+        return os.getcwd()
 
     def get_absolute_path(self):
         return pathlib.Path().resolve()
@@ -110,7 +112,7 @@ class Encrypt:
             print(content_file)
 
         decrypted_content = fernet.decrypt(content_file)
-
+        
         with open(FILE_TO_DECRYPT, 'wb') as file_decrypted:
             file_decrypted.write(decrypted_content)
 
@@ -152,7 +154,6 @@ class Encrypt:
             print(os.path.getsize(text_file_to_encrypt))
             print(file.read())
 
-
     def password_method_handler(self, text_file_to_encrypt, password):
         key = self.get_key_by_password(password)
 
@@ -162,23 +163,22 @@ class Encrypt:
 
 
 def main():
+    # Create directory named Alpasec in %Appdata%
+    # Create directory named scripts in %Appdata%\Alpasec
+    # Drop this script in %Appdata%\Alpasec\scripts
+
     encrypt = Encrypt()
+    currentPath = encrypt.get_current_path()
+    file = os.path.join(currentPath, sys.argv[2])
 
-    ABSOLUTE_DIRECTORY_PATH = encrypt.get_absolute_path()
+    password = b"vGSQKxjrXWGR6tHn"
 
-    THIS_SCRIPT_PATH = str(ABSOLUTE_DIRECTORY_PATH) + '/src/scripts'
-    FILE_KEY = THIS_SCRIPT_PATH + "/filekey.key"
-
-    # TEXT_FILE_TO_ENCRYPT = str(ABSOLUTE_DIRECTORY_PATH) + '/src/tests/text.txt'
-    FILE_TO_ENCRYPT = sys.argv[0]
-
-    print(sys.argv[1])
-
-    # password = b"teste"
-
-    # if password:
-    #     encrypt.password_method_handler(TEXT_FILE_TO_ENCRYPT, password);
-    # else:
-    #     encrypt.file_method_handler(TEXT_FILE_TO_ENCRYPT, FILE_KEY)
+    if (os.path.exists(file)):
+        if (sys.argv[1] == "encrypt"):
+            encrypt.encrypt_file(file, password)
+        elif (sys.argv[1] == "decrypt"):
+            encrypt.decrypt_file(file, password)
+    else:
+        print(">> File not exists!")
 
 main()
