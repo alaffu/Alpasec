@@ -4,9 +4,13 @@ public static class Encrypt
 {
     public static string RunPython(string action, string fileName)
     {
-        const string PYTHON_PATH = "python.exe";
-        string SCRIPT_RELATIVE_PATH = Path.Combine(Program.rootPath, "scripts/encrypt.py");
+        //windows
+        // const string PYTHON_PATH = "python.exe";
 
+        //linux
+        const string PYTHON_PATH = "/usr/bin/python3";
+
+        string SCRIPT_RELATIVE_PATH = Path.Combine(Program.rootPath, "scripts/encrypt.py");
         ProcessStartInfo start = new ProcessStartInfo();
         start.Arguments = $"{SCRIPT_RELATIVE_PATH} {action} {fileName}";
         start.FileName = PYTHON_PATH;
