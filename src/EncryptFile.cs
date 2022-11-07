@@ -1,15 +1,14 @@
 using System.Diagnostics;
 
-public class EncryptFile
+public static class EncryptFile
 {
     public static string RunPython()
     {
-        const string PYTHON_PATH = "/usr/bin/python3";
-        const string SCRIPT_RELATIVE_PATH = "/scripts/script_encrypt.py";
-
+        const string PYTHON_PATH = "python.exe";
+        const string SCRIPT_RELATIVE_PATH = "/src/scripts/script_encrypt.py";
 
         ProcessStartInfo start = new ProcessStartInfo();
-        start.Arguments = Path.Join(Directory.GetCurrentDirectory(), SCRIPT_RELATIVE_PATH);
+        start.Arguments = $"{Path.Join(Environment.CurrentDirectory, SCRIPT_RELATIVE_PATH)} text.txt";
         start.FileName = PYTHON_PATH;
         start.UseShellExecute = false;
         start.RedirectStandardOutput = true;

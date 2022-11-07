@@ -1,177 +1,184 @@
 import base64
 import os
 import pathlib
+import sys
 
 from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
+class Encrypt:
+    def get_key_by_password(self, password):
+        salt = os.urandom(16);
 
-def get_key_by_password(password):
-    salt = os.urandom(16);
+        kdf = PBKDF2HMAC(
+            algorithm=hashes.SHA256(),
+            length=32,
+            iterations=390000,
+            salt=salt
+        )
 
-    kdf = PBKDF2HMAC(
-        algorithm=hashes.SHA256(),
-        length=32,
-        iterations=390000,
-        salt=salt
-    )
+        key = base64.urlsafe_b64encode(kdf.derive(password))
+        return key
 
-    key = base64.urlsafe_b64encode(kdf.derive(password))
-    return key
+    def create_key_by_file(self, file_path):
+            key = Fernet.generate_key()
+            with open(file_path, "wb") as filekey:
+                filekey.write(key)
+            return key
 
-def create_key_by_file(file_path):
-        key = Fernet.generate_key()
-        with open(file_path, "wb") as filekey:
-            filekey.write(key)
+
+    def get_key_from_file(self, file_path):
+        with open(file_path, "rb") as filekey:
+            key = filekey.read()
         return key
 
 
-def get_key_from_file(file_path):
-    with open(file_path, "rb") as filekey:
-        key = filekey.read()
-    return key
+    def encrypt_file(self, file_path, filekey=None):
+        text_file_to_encrypt = file_path
+        FILE_KEY = filekey
+
+        self.create_key_by_file(file_path=FILE_KEY)
+        key = self.get_key_from_file(file_path=FILE_KEY)
+        fernet = Fernet(key)
+
+        with open(text_file_to_encrypt, 'rb') as file:
+            content_file = file.read()
+
+        content_encrypted = fernet.encrypt(content_file)
+
+        with open(text_file_to_encrypt, 'wb') as file_encrypted:
+            file_encrypted.write(content_encrypted)
 
 
-def encrypt_file(file_path, filekey=None):
-    text_file_to_encrypt = file_path
-    FILE_KEY = filekey
+    def decrypt_file(self, file_path, filekey):
+        key = self.get_key_from_file(filekey)
+        fernet = Fernet(key)
 
-    create_key_by_file(file_path=FILE_KEY)
-    key = get_key_from_file(file_path=FILE_KEY)
-    fernet = Fernet(key)
+        with open(file_path, 'rb') as file:
+            content_file = file.read()
 
-    with open(text_file_to_encrypt, 'rb') as file:
-        content_file = file.read()
+        content_decrypted = fernet.decrypt(content_file)
 
-    content_encrypted = fernet.encrypt(content_file)
-
-    with open(text_file_to_encrypt, 'wb') as file_encrypted:
-        file_encrypted.write(content_encrypted)
+        with open(file_path, 'wb') as file_encrypted:
+            file_encrypted.write(content_decrypted)
 
 
-def decrypt_file(file_path, filekey):
-    key = get_key_from_file(filekey)
-    fernet = Fernet(key)
-
-    with open(file_path, 'rb') as file:
-        content_file = file.read()
-
-    content_decrypted = fernet.decrypt(content_file)
-
-    with open(file_path, 'wb') as file_encrypted:
-        file_encrypted.write(content_decrypted)
+    def read_file(self, file_path):
+        with open(file_path, "r") as file:
+            print(file.read)
 
 
-def read_file(file_path):
-    with open(file_path, "r") as file:
-        print(file.read)
+    def get_size_file(self, file_path):
+        return os.path.getsize(file_path)
 
 
-def get_size_file(file_path):
-    return os.path.getsize(file_path)
+    def get_absolute_path(self):
+        return pathlib.Path().resolve()
 
 
-def get_absolute_path():
-    return pathlib.Path().resolve()
+    def get_parent_path(self, path):
+        return os.path.abspath(os.path.join(path, os.pardir))
 
 
-def get_parent_path(path):
-    return os.path.abspath(os.path.join(path, os.pardir))
+    def encrypt_file_password_method(self, file_path,  key):
+        FILE_TO_ENCRYPT = file_path
+        # KEY = get_key_by_password(password)
+        KEY = key
+
+        fernet = Fernet(KEY)
+        print(FILE_TO_ENCRYPT)
+
+        with open(FILE_TO_ENCRYPT, 'rb') as file:
+            content_file = file.read()
+
+        encrypted_content = fernet.encrypt(content_file)
+
+        with open(FILE_TO_ENCRYPT, 'wb') as file_encrypted:
+            file_encrypted.write(encrypted_content)
 
 
-def encrypt_file_password_method(file_path,  key):
-    FILE_TO_ENCRYPT = file_path
-    # KEY = get_key_by_password(password)
-    KEY = key
+    def decrypt_file_password_method(self, file_path_decrypt, key):
+        FILE_TO_DECRYPT = file_path_decrypt
+        # KEY = get_key_by_password(password)
+        KEY = key
 
-    fernet = Fernet(KEY)
-    print(FILE_TO_ENCRYPT)
+        fernet = Fernet(KEY)
 
-    with open(FILE_TO_ENCRYPT, 'rb') as file:
-        content_file = file.read()
+        with open(FILE_TO_DECRYPT, 'rb') as file:
+            content_file = file.read()
+            print(content_file)
 
-    encrypted_content = fernet.encrypt(content_file)
+        decrypted_content = fernet.decrypt(content_file)
 
-    with open(FILE_TO_ENCRYPT, 'wb') as file_encrypted:
-        file_encrypted.write(encrypted_content)
+        with open(FILE_TO_DECRYPT, 'wb') as file_decrypted:
+            file_decrypted.write(decrypted_content)
 
-
-def decrypt_file_password_method(file_path_decrypt, key):
-    FILE_TO_DECRYPT = file_path_decrypt
-    # KEY = get_key_by_password(password)
-    KEY = key
-
-    fernet = Fernet(KEY)
-
-    with open(FILE_TO_DECRYPT, 'rb') as file:
-        content_file = file.read()
-        print(content_file)
-
-    decrypted_content = fernet.decrypt(content_file)
-
-    with open(FILE_TO_DECRYPT, 'wb') as file_decrypted:
-        file_decrypted.write(decrypted_content)
-
-    with open(FILE_TO_DECRYPT, 'rb') as file:
-        content_file = file.read()
-        print(str(content_file))
+        with open(FILE_TO_DECRYPT, 'rb') as file:
+            content_file = file.read()
+            print(str(content_file))
 
 
-def encrypt_file_key_file_method(text_file_to_encrypt, file_key):
+    def encrypt_file_key_file_method(self, text_file_to_encrypt, file_key):
 
-    print(get_size_file(text_file_to_encrypt))
+        print(self.get_size_file(text_file_to_encrypt))
 
-    encrypt_file(text_file_to_encrypt, file_key)
+        self.encrypt_file(text_file_to_encrypt, file_key)
 
-    print(get_size_file(text_file_to_encrypt))
+        print(self.get_size_file(text_file_to_encrypt))
 
-    with open(text_file_to_encrypt, "r") as file:
-        print(os.path.getsize(text_file_to_encrypt))
-        print(file.read())
+        with open(text_file_to_encrypt, "r") as file:
+            print(os.path.getsize(text_file_to_encrypt))
+            print(file.read())
 
-    decrypt_file(text_file_to_encrypt, file_key)
+        self.decrypt_file(text_file_to_encrypt, file_key)
 
-    with open(text_file_to_encrypt, "r") as file:
-        print(os.path.getsize(text_file_to_encrypt))
-        print(file.read())
-
-
-def file_method_handler(text_file_to_encrypt, file_key):
-    print(get_size_file(text_file_to_encrypt))
-
-    encrypt_file(text_file_to_encrypt, file_key)
-    with open(text_file_to_encrypt, "r") as file:
-        print(os.path.getsize(text_file_to_encrypt))
-        print(file.read())
-
-    decrypt_file(text_file_to_encrypt, file_key)
-
-    with open(text_file_to_encrypt, "r") as file:
-        print(os.path.getsize(text_file_to_encrypt))
-        print(file.read())
+        with open(text_file_to_encrypt, "r") as file:
+            print(os.path.getsize(text_file_to_encrypt))
+            print(file.read())
 
 
-def password_method_handler(text_file_to_encrypt, password):
-    key = get_key_by_password(password)
+    def file_method_handler(self, text_file_to_encrypt, file_key):
+        print(self.get_size_file(text_file_to_encrypt))
 
-    encrypt_file_password_method(text_file_to_encrypt, key)
+        self.encrypt_file(text_file_to_encrypt, file_key)
+        with open(text_file_to_encrypt, "r") as file:
+            print(os.path.getsize(text_file_to_encrypt))
+            print(file.read())
 
-    decrypt_file_password_method(text_file_to_encrypt, key)
+        self.decrypt_file(text_file_to_encrypt, file_key)
+
+        with open(text_file_to_encrypt, "r") as file:
+            print(os.path.getsize(text_file_to_encrypt))
+            print(file.read())
+
+
+    def password_method_handler(self, text_file_to_encrypt, password):
+        key = self.get_key_by_password(password)
+
+        self.encrypt_file_password_method(text_file_to_encrypt, key)
+
+        self.decrypt_file_password_method(text_file_to_encrypt, key)
 
 
 def main():
-    ABSOLUTE_DIRECTORY_PATH = get_absolute_path()
+    encrypt = Encrypt()
+
+    ABSOLUTE_DIRECTORY_PATH = encrypt.get_absolute_path()
+
     THIS_SCRIPT_PATH = str(ABSOLUTE_DIRECTORY_PATH) + '/src/scripts'
     FILE_KEY = THIS_SCRIPT_PATH + "/filekey.key"
 
-    TEXT_FILE_TO_ENCRYPT = str(ABSOLUTE_DIRECTORY_PATH) + '/src/tests/text.txt'
+    # TEXT_FILE_TO_ENCRYPT = str(ABSOLUTE_DIRECTORY_PATH) + '/src/tests/text.txt'
+    FILE_TO_ENCRYPT = sys.argv[0]
 
-    password = b"teste"
+    print(sys.argv[1])
 
-    if password:
-        password_method_handler(TEXT_FILE_TO_ENCRYPT, password);
-    else:
-        file_method_handler(TEXT_FILE_TO_ENCRYPT, FILE_KEY)
+    # password = b"teste"
+
+    # if password:
+    #     encrypt.password_method_handler(TEXT_FILE_TO_ENCRYPT, password);
+    # else:
+    #     encrypt.file_method_handler(TEXT_FILE_TO_ENCRYPT, FILE_KEY)
 
 main()
