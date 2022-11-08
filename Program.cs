@@ -3,6 +3,7 @@
 public class Program
 {
     public static string rootPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Alpasec");
+    public static string usersPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Alpasec");
 
     public class Options
     {
@@ -24,19 +25,21 @@ public class Program
 
     public static void Main(string[] args)
     {
+        if (!Directory.Exists(usersPath)) {
+            Directory.CreateDirectory(usersPath);
+        }
+
         Parser.Default.ParseArguments<Options>(args)
             .WithParsed(RunOptions);
     }
 
     public static void RunOptions(Options opts)
     {
-        if (opts.AddUser != null)
+        if (opts.AddUser != null && opts.Password != null)
         {
+            User user = new User(opts.AddUser, opts.Password);
+            user.Save();
             Console.WriteLine("Adding user");
-        }
-        else if (opts.Password != null)
-        {
-            Console.WriteLine("Enter new password");
         }
         else if (opts.Encrypt != null)
         {
@@ -52,7 +55,7 @@ public class Program
         {
             Console.WriteLine("Logging out...");
         } else {
-            Console.WriteLine(">> Version 1.0.0");
+            Console.WriteLine(">> No arguments passed or incomplete arguments");
         }
     }
 }
