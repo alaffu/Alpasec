@@ -52,7 +52,7 @@ public class Program
         {
             Console.WriteLine("Logging out...");
         } else {
-            Console.WriteLine("Alpasec.Cli 1.0.0");
+            Console.WriteLine(">> Version 1.0.0");
         }
     }
 }
