@@ -27,7 +27,7 @@ public class Program
         public string? Decrypt { get; set; }
 
         [Option('l', "logout", Required = false, HelpText = "Logout user")]
-        public string? Logout { get; set; }
+        public bool Logout { get; set; }
     }
 
     public static void PrepareEnvironment()
@@ -82,7 +82,7 @@ public class Program
             Encrypt.RunPython("decrypt", opts.Decrypt, user.Password);
         }
 
-        else if (opts.Logout != "")
+        else if (opts.Logout)
         {
             Auth.Logout();
         }
