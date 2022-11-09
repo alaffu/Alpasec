@@ -12,7 +12,7 @@ public static class Encrypt
             return "python.exe";
 
         else
-            throw new Exception("Operational system not yet supported!");
+            throw new Exception("Operational system not yet supported");
     }
 
     public static string RunPython(string action, string fileName, string password)

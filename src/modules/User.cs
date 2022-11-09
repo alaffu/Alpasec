@@ -1,9 +1,10 @@
 using Newtonsoft.Json;
 
-class User
+public class User
 {
     public string Name { get; set; }
     public string Password { get; set; }
+    public bool IsLoggedIn { get; set; }
     private string UserPath { get; set; }
 
     private bool UserAlreadyExists()
@@ -13,8 +14,7 @@ class User
 
         if (usersList != null)
         {
-            foreach (User user in usersList)
-            {
+            foreach (User user in usersList) {
                 if (user.Name == this.Name)
                     return true;
             }
@@ -36,6 +36,7 @@ class User
             
             usersList.Add(this);
             File.WriteAllText(Program.usersJsonPath, JsonConvert.SerializeObject(usersList));
+            Console.WriteLine(">> User added");
         } else {
             Console.WriteLine(">> User already exists");
         }
@@ -43,9 +44,8 @@ class User
 
     public void MoveFile(string result, string file)
     {
-        if (!result.StartsWith($">> File {file} encrypted!")) {
+        if (!result.StartsWith($">> File {file} encrypted"))
             return;
-        }
 
         if (!Directory.Exists(UserPath))
             Directory.CreateDirectory(UserPath);
@@ -64,6 +64,7 @@ class User
     {
         Name = name;
         Password = password;
+        IsLoggedIn = false;
         UserPath = Path.Combine(Program.usersPath, Name);
     }
 }

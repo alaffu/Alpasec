@@ -14,8 +14,8 @@ public class Program
         [Option('s', "set-password", Required = false, HelpText = "Sets user password")]
         public string? SetPassword { get; set; }
 
-        [Option('u', "user", Required = false, HelpText = "Username for login")]
-        public string? User { get; set; }
+        [Option('l', "login", Required = false, HelpText = "Username for login")]
+        public string? Login { get; set; }
 
         [Option('p', "password", Required = false, HelpText = "Password for login")]
         public string? Password { get; set; }
@@ -44,30 +44,50 @@ public class Program
 
     public static void RunOptions(Options opts)
     {
-        User adm = new User("adm", "adm");
-
         if (opts.AddUser != null && opts.SetPassword != null)
         {
             User user = new User(opts.AddUser, opts.SetPassword);
             user.Save();
         }
-        else if (opts.User != null && opts.Password != null)
+
+        else if (opts.Login != null && opts.Password != null)
         {
-            Console.WriteLine("Logging in");
+            Auth.Login(opts.Login, opts.Password);
         }
+
         else if (opts.Encrypt != null)
         {
-            string result = Encrypt.RunPython("encrypt", opts.Encrypt, "123456");
-            adm.MoveFile(result, opts.Encrypt);
+            User user = Auth.GetLoggedUser();
+
+            if (user is null)
+            {
+                Console.WriteLine(">> You must be logged in to perform this action");
+                return;
+            }
+
+            string result = Encrypt.RunPython("encrypt", opts.Encrypt, user.Password);
+            user.MoveFile(result, opts.Encrypt);
         }
+
         else if (opts.Decrypt != null)
         {
-            Encrypt.RunPython("decrypt", opts.Decrypt, "123456");
+            User user = Auth.GetLoggedUser();
+
+            if (user == null)
+            {
+                Console.WriteLine(">> You must be logged in to perform this action");
+                return;
+            }
+
+            Encrypt.RunPython("decrypt", opts.Decrypt, user.Password);
         }
-        else if (opts.Logout != null)
+
+        else if (opts.Logout != "")
         {
-            Console.WriteLine("Logging out...");
-        } else {
+            Auth.Logout();
+        }
+        
+        else {
             Console.WriteLine(">> No arguments passed or incomplete arguments");
         }
     }

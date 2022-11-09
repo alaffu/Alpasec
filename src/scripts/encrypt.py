@@ -54,7 +54,7 @@ class Encrypt:
     def decrypt_file(self, file_path, key):
         if (not self.is_file_encrypted(file_path)):
             print('>> This file is not encrypted')
-            return
+            sys.exit()
 
         fernet = self.encode_key(key)
 
@@ -65,7 +65,7 @@ class Encrypt:
             content_decrypted = fernet.decrypt(content_file)
         except:
             print('>> The key passed is not correct')
-            return
+            sys.exit()
 
         with open(file_path, 'wb') as file_encrypted:
             file_encrypted.write(content_decrypted)
@@ -86,12 +86,12 @@ def main():
 
         if (sys.argv[1] == "encrypt"):
             encrypt.encrypt_file(file, password)
-            print(f">> File {sys.argv[2]} encrypted!")
+            print(f">> File {sys.argv[2]} encrypted")
         elif (sys.argv[1] == "decrypt"):
             encrypt.decrypt_file(file, password)
-            print(f">> File {sys.argv[2]} decrypted!")
+            print(f">> File {sys.argv[2]} decrypted")
     else:
-        print(">> File not exists!")
+        print(">> File not exists")
 
 
 main()
