@@ -32,18 +32,20 @@ public class Program
 
     public static void PrepareEnvironment()
     {
-        if (!File.Exists(usersJsonPath))
-            File.Create(usersJsonPath).Close();
-
         if (!Directory.Exists(rootPath))
             Directory.CreateDirectory(rootPath);
 
         if (!Directory.Exists(usersPath))
             Directory.CreateDirectory(usersPath);
+
+        if (!File.Exists(usersJsonPath))
+            File.Create(usersJsonPath).Close();
     }
 
     public static void RunOptions(Options opts)
     {
+        User adm = new User("adm", "adm");
+
         if (opts.AddUser != null && opts.SetPassword != null)
         {
             User user = new User(opts.AddUser, opts.SetPassword);
@@ -55,7 +57,8 @@ public class Program
         }
         else if (opts.Encrypt != null)
         {
-            Encrypt.RunPython("encrypt", opts.Encrypt, "123456");
+            string result = Encrypt.RunPython("encrypt", opts.Encrypt, "123456");
+            adm.MoveFile(result, opts.Encrypt);
         }
         else if (opts.Decrypt != null)
         {

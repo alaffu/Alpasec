@@ -36,7 +36,7 @@ public static class Encrypt
                     string result = reader.ReadToEnd();
 
                     if (stderr != "") 
-                        Console.WriteLine(stderr);
+                        Console.WriteLine($">> {stderr}");
                     if (result != "") 
                         Console.WriteLine(result);
 
@@ -44,8 +44,8 @@ public static class Encrypt
                 }
             }
         } catch (Exception e) {
-            Console.WriteLine(e.Message);
-            return null;
+            Console.WriteLine($">> {e.Message}");
+            return "";
         }
     }
 }

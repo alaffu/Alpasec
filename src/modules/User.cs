@@ -11,10 +11,13 @@ class User
         string json = File.ReadAllText(Program.usersJsonPath);
         List<User> usersList = JsonConvert.DeserializeObject<List<User>>(json);
 
-        foreach (User user in usersList)
+        if (usersList != null)
         {
-            if (user.Name == this.Name)
-                return true;
+            foreach (User user in usersList)
+            {
+                if (user.Name == this.Name)
+                    return true;
+            }
         }
 
         return false;
@@ -38,9 +41,23 @@ class User
         }
     }
 
-    public void Delete()
+    public void MoveFile(string result, string file)
     {
+        if (!result.StartsWith($">> File {file} encrypted!")) {
+            return;
+        }
 
+        if (!Directory.Exists(UserPath))
+            Directory.CreateDirectory(UserPath);
+
+        string filePath = Path.Combine(System.IO.Directory.GetCurrentDirectory(), file);
+        string newFilePath = Path.Combine(UserPath, file);
+
+        try {
+            System.IO.File.Move(filePath, newFilePath);
+        } catch (Exception e) {
+            Console.WriteLine(">> A file with this name already exists in your user folder");
+        }
     }
 
     public User(string name, string password)
