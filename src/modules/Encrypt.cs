@@ -15,14 +15,15 @@ public static class Encrypt
             throw new Exception("Operational system not yet supported!");
         }
     }
-    public static string RunPython(string action, string fileName)
+    
+    public static string RunPython(string action, string fileName, string password)
     {
         try {
             string PYTHON_PATH = GetPythonPath();
 
             string SCRIPT_RELATIVE_PATH = Path.Combine(Program.rootPath, "scripts/encrypt.py");
             ProcessStartInfo start = new ProcessStartInfo();
-            start.Arguments = $"{SCRIPT_RELATIVE_PATH} {action} {fileName}";
+            start.Arguments = $"{SCRIPT_RELATIVE_PATH} {action} {fileName} {password}";
             start.FileName = PYTHON_PATH;
             start.UseShellExecute = false;
             start.RedirectStandardOutput = true;

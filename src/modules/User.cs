@@ -1,32 +1,22 @@
-// Import JsonConvert
 using Newtonsoft.Json;
 
 class User
 {
-    public string? Name { get; set; }
-
-    public string? Password { get; set; }
+    public string Name { get; set; }
+    public string Password { get; set; }
+    private string Path = Path.Combine(Program.usersPath, Name);
 
     private bool UserAlreadyExists()
     {
-        string users = Path.Combine(Program.rootPath, "users.json");
-
-        if (!File.Exists(users))
-        {
-            File.Create(users).Close();
-            return false;
-        }
-
-        string json = File.ReadAllText(users);
+        string json = File.ReadAllText(Program.usersJsonPath);
         List<User> usersList = JsonConvert.DeserializeObject<List<User>>(json);
 
         foreach (User user in usersList)
         {
             if (user.Name == this.Name)
-            {
                 return true;
-            }
         }
+
         return false;
     }
 
@@ -34,22 +24,15 @@ class User
     {
         if (!UserAlreadyExists())
         {
-            string users = Path.Combine(Program.rootPath, "users.json");
             List<User> usersList = new List<User>();
-            
-            if (!File.Exists(users))
-            {
-                File.Create(users).Close();
-            }
 
-            string json = File.ReadAllText(users);
+            string json = File.ReadAllText(Program.usersJsonPath);
 
-            if (json != "") {
+            if (json != "")
                 usersList = JsonConvert.DeserializeObject<List<User>>(json);
-            }
             
             usersList.Add(this);
-            File.WriteAllText(users, JsonConvert.SerializeObject(usersList));
+            File.WriteAllText(Program.usersJsonPath, JsonConvert.SerializeObject(usersList));
         } else {
             Console.WriteLine(">> User already exists");
         }

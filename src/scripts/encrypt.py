@@ -1,11 +1,7 @@
-import base64
 import os
-import pathlib
 import sys
 
 from cryptography.fernet import Fernet
-from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 class Encrypt:
     def get_current_path(self):
@@ -38,15 +34,12 @@ class Encrypt:
 
 
 def main():
-    # Create directory named Alpasec in %Appdata%
-    # Create directory named scripts in %Appdata%\Alpasec
-    # Drop this script in %Appdata%\Alpasec\scripts
-
     encrypt = Encrypt()
+
     currentPath = encrypt.get_current_path()
     file = os.path.join(currentPath, sys.argv[2])
 
-    password = b"vGSQKxjrXWGR6tHn"
+    password = sys.argv[3]
 
     if (os.path.exists(file)):
         if (sys.argv[1] == "encrypt"):
@@ -55,5 +48,6 @@ def main():
             encrypt.decrypt_file(file, password)
     else:
         print(">> File not exists!")
+
 
 main()
