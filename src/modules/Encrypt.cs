@@ -5,15 +5,14 @@ public static class Encrypt
 {
     public static string GetPythonPath()
     {
-        if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(OSPlatform.Linux)){
+        if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             return "/usr/bin/python3";
-        }
+
         else if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-        {
             return "python.exe";
-        } else {
+            
+        else
             throw new Exception("Operational system not yet supported!");
-        }
     }
     
     public static string RunPython(string action, string fileName, string password)
@@ -35,14 +34,12 @@ public static class Encrypt
                 {
                     string stderr = process.StandardError.ReadToEnd();
                     string result = reader.ReadToEnd();
-                    Console.WriteLine(stderr);
-                    Console.WriteLine(result);
 
                     return result;
                 }
             }
         } catch (Exception e) {
-            Console.WriteLine(e.Message);
+            Console.WriteLine($">> {e.Message}");
             return null;
         }
 

@@ -2,7 +2,7 @@
 
 ## What is it and what is it for
 
-> AlpaSec.Cli aims to protect files and data stored locally in users' folders, using encryption and decryption methods.
+AlpaSec.Cli aims to protect files and data stored locally in users' folders, using encryption and decryption methods.
 
 ## Installation
 
@@ -14,4 +14,4 @@
                 
 
 ## Commands
-> not finished yet
+not finished yet
