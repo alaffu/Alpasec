@@ -4,7 +4,7 @@ class User
 {
     public string Name { get; set; }
     public string Password { get; set; }
-    private string Path = Path.Combine(Program.usersPath, Name);
+    private string UserPath { get; set; }
 
     private bool UserAlreadyExists()
     {
@@ -47,5 +47,6 @@ class User
     {
         Name = name;
         Password = password;
+        UserPath = Path.Combine(Program.usersPath, Name);
     }
 }

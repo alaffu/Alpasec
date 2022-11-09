@@ -9,31 +9,31 @@ public class Program
     public class Options
     {
         [Option('a', "add-user", Required = false, HelpText = "Adds new user")]
-        public string AddUser { get; set; }
+        public string? AddUser { get; set; }
 
-        [Option('p', "set-password", Required = false, HelpText = "Sets user password")]
-        public string SetPassword { get; set; }
+        [Option('s', "set-password", Required = false, HelpText = "Sets user password")]
+        public string? SetPassword { get; set; }
 
-        [Option('a', "user", Required = false, HelpText = "Username for login")]
-        public string User { get; set; }
+        [Option('u', "user", Required = false, HelpText = "Username for login")]
+        public string? User { get; set; }
 
         [Option('p', "password", Required = false, HelpText = "Password for login")]
-        public string Password { get; set; }
+        public string? Password { get; set; }
 
         [Option('e', "encrypt", Required = false, HelpText = "Encrypt existing files")]
-        public string Encrypt { get; set; }
+        public string? Encrypt { get; set; }
 
         [Option('d', "decrypt", Required = false, HelpText = "Decrypt existing files")]
-        public string Decrypt { get; set; }
+        public string? Decrypt { get; set; }
 
         [Option('l', "logout", Required = false, HelpText = "Logout user")]
-        public string Logout { get; set; }
+        public string? Logout { get; set; }
     }
 
     public static void PrepareEnvironment()
     {
         if (!File.Exists(usersJsonPath))
-            File.Create(users).Close();
+            File.Create(usersJsonPath).Close();
 
         if (!Directory.Exists(rootPath))
             Directory.CreateDirectory(rootPath);
@@ -55,11 +55,11 @@ public class Program
         }
         else if (opts.Encrypt != null)
         {
-            Encrypt.RunPython("encrypt", opts.Encrypt);
+            Encrypt.RunPython("encrypt", opts.Encrypt, "123456");
         }
         else if (opts.Decrypt != null)
         {
-            Encrypt.RunPython("decrypt", opts.Decrypt);
+            Encrypt.RunPython("decrypt", opts.Decrypt, "123456");
         }
         else if (opts.Logout != null)
         {

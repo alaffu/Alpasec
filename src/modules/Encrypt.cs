@@ -10,11 +10,11 @@ public static class Encrypt
 
         else if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             return "python.exe";
-            
+
         else
             throw new Exception("Operational system not yet supported!");
     }
-    
+
     public static string RunPython(string action, string fileName, string password)
     {
         try {
@@ -35,14 +35,17 @@ public static class Encrypt
                     string stderr = process.StandardError.ReadToEnd();
                     string result = reader.ReadToEnd();
 
+                    if (stderr != "") 
+                        Console.WriteLine(stderr);
+                    if (result != "") 
+                        Console.WriteLine(result);
+
                     return result;
                 }
             }
         } catch (Exception e) {
-            Console.WriteLine($">> {e.Message}");
+            Console.WriteLine(e.Message);
             return null;
         }
-
     }
-
 }
