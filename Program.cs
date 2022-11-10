@@ -11,13 +11,10 @@ public class Program
         [Option('a', "add-user", Required = false, HelpText = "Adds new user")]
         public string? AddUser { get; set; }
 
-        [Option('s', "set-password", Required = false, HelpText = "Sets user password")]
-        public string? SetPassword { get; set; }
-
-        [Option('l', "login", Required = false, HelpText = "Username for login")]
+        [Option('l', "login", Required = false, HelpText = "Logs in user")]
         public string? Login { get; set; }
 
-        [Option('p', "password", Required = false, HelpText = "Password for login")]
+        [Option('p', "password", Required = false, HelpText = "Password for user")]
         public string? Password { get; set; }
 
         [Option('e', "encrypt", Required = false, HelpText = "Encrypt existing files")]
@@ -44,9 +41,9 @@ public class Program
 
     public static void RunOptions(Options opts)
     {
-        if (opts.AddUser != null && opts.SetPassword != null)
+        if (opts.AddUser != null && opts.Password != null)
         {
-            User user = new User(opts.AddUser, opts.SetPassword);
+            User user = new User(opts.AddUser, opts.Password);
             user.Save();
         }
 
@@ -91,7 +88,7 @@ public class Program
             Console.WriteLine(">> No arguments passed or incomplete arguments");
         }
     }
-
+    
     public static void Main(string[] args)
     {
         PrepareEnvironment();
