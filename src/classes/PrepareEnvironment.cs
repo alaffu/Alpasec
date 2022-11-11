@@ -14,7 +14,7 @@ static class PrepareEnvironment
             File.Create(Program.usersJsonPath).Close();
 
             List<User> usersList = new List<User>();
-            usersList.Add(new User("admin", "admin"));
+            usersList.Add(new User("admin", "admin", true));
             File.WriteAllText(Program.usersJsonPath, JsonConvert.SerializeObject(usersList));
         }
     }

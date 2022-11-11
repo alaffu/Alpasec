@@ -20,26 +20,40 @@ public class Program
         [Option('e', "encrypt", Required = false, HelpText = "Encrypt existing files")]
         public string? Encrypt { get; set; }
 
+        [Option('n', "no-move", Required = false, HelpText = "Do not move files")]
+        public bool NoMove { get; set; }
+
         [Option('d', "decrypt", Required = false, HelpText = "Decrypt existing files")]
         public string? Decrypt { get; set; }
 
-        [Option('l', "logout", Required = false, HelpText = "Logout user")]
+        [Option('g', "logout", Required = false, HelpText = "Logout user")]
         public bool Logout { get; set; }
+
+        [Option('t', "list", Required = false, HelpText = "List files in user folder")]
+        public bool List { get; set; }
     }
 
     public static void RunOptions(Options opts)
     {
+        Console.WriteLine(@"
+    ___    __            _____            _________ 
+   /   |  / /___  ____ _/ ___/___  _____ / ____/ (_)
+  / /| | / / __ \/ __ `/\__ \/ _ \/ ___// /   / / / 
+ / ___ |/ / /_/ / /_/ /___/ /  __/ /___/ /___/ / /  
+/_/  |_/_/ .___/\__,_//____/\___/\___(_)____/_/_/   
+        /_/                                         
+");
         if (opts.AddUser != null && opts.Password != null)
         {
             User user = Auth.GetLoggedUser();
 
-            if (user is null || user.Name != "admin")
+            if (user is null || !user.IsAdministrator)
             {
                 Console.WriteLine(">> You are not logged in as admin");
                 return;
             }
 
-            User newUser = new User(opts.AddUser, opts.Password);
+            User newUser = new User(opts.AddUser, opts.Password, false);
             newUser.Save();
         }
 
@@ -59,7 +73,9 @@ public class Program
             }
 
             string result = Encrypt.RunPython("encrypt", opts.Encrypt, user.Password);
-            user.MoveFile(result, opts.Encrypt);
+
+            if (!opts.NoMove)
+                user.MoveFile(result, opts.Encrypt);
         }
 
         else if (opts.Decrypt != null)
@@ -79,9 +95,22 @@ public class Program
         {
             Auth.Logout();
         }
+
+        else if (opts.List)
+        {
+            User user = Auth.GetLoggedUser();
+
+            if (user == null)
+            {
+                Console.WriteLine(">> You must be logged in to perform this action");
+                return;
+            }
+
+            user.ListFiles();
+        }
         
         else {
-            Console.WriteLine(">> No arguments passed or incomplete arguments");
+            Console.WriteLine(">> No arguments passed or the command is incomplete");
         }
     }
     

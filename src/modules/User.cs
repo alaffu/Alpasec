@@ -5,6 +5,7 @@ public class User
     public string Name { get; set; }
     public string Password { get; set; }
     public bool IsLoggedIn { get; set; }
+    public bool IsAdministrator { get; set; }
     private string UserPath { get; set; }
 
     private bool UserAlreadyExists()
@@ -35,6 +36,7 @@ public class User
                 usersList = JsonConvert.DeserializeObject<List<User>>(json);
             
             usersList.Add(this);
+            
             File.WriteAllText(Program.usersJsonPath, JsonConvert.SerializeObject(usersList));
             Console.WriteLine(">> User added");
         } else {
@@ -60,11 +62,33 @@ public class User
         }
     }
 
-    public User(string name, string password)
+    public void ListFiles()
+    {
+        if (!Directory.Exists(UserPath))
+        {
+            Console.WriteLine(">> No files found");
+            return;
+        }
+
+        string [] fileEntries = Directory.GetFiles(UserPath);
+
+        if (fileEntries.Length == 0)
+        {
+            Console.WriteLine(">> No files found");
+            return;
+        }
+
+        Console.WriteLine($">> Files stored in the {Name} folder:");
+        foreach (string fileName in fileEntries)
+            Console.WriteLine($"   {Path.GetFileName(fileName)}");
+    }
+
+    public User(string name, string password, bool isAdministrator)
     {
         Name = name;
         Password = password;
         IsLoggedIn = false;
+        IsAdministrator = isAdministrator;
         UserPath = Path.Combine(Program.usersPath, Name);
     }
 }

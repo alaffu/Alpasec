@@ -1,5 +1,14 @@
 # Alpasec.Cli
 
+```
+    ___    __            _____            _________ 
+   /   |  / /___  ____ _/ ___/___  _____ / ____/ (_)
+  / /| | / / __ \/ __ `/\__ \/ _ \/ ___// /   / / / 
+ / ___ |/ / /_/ / /_/ /___/ /  __/ /___/ /___/ / /  
+/_/  |_/_/ .___/\__,_//____/\___/\___(_)____/_/_/   
+        /_/       
+```
+
 ## What is it and what is it for
 
 AlpaSec.Cli aims to protect files and their respective data stored locally by users, using methods for encryption and decryption.
@@ -18,9 +27,10 @@ AlpaSec.Cli aims to protect files and their respective data stored locally by us
 | alpasec --add-user {Username} --password {Password} | Add a new user | Admin |
 | alpasec --login {Username} --password {Password} | Login User | None |
 | alpasec --logout | Logout User | None |
-| alpasec --encrypt {FileName} | Encrypts a file | User |
+| alpasec [--no-move] --encrypt {FileName} | Encrypts a file | User |
 | alpasec --decrypt {FileName} | Decrypts a file | User |
-| alpasec --help | Shows all commands | None |
+| alpasec --list | List files in user folder | User |
+| alpasec --help | Shows all arguments | None |
 | alpasec --version | Shows Alpasec current version | None |
 
 ## ToDo
@@ -28,7 +38,7 @@ AlpaSec.Cli aims to protect files and their respective data stored locally by us
 - [X] Write all commands in Readme
 - [ ] Implement command to list users
 - [ ] Implement command to change users
-- [ ] Implement command list files inside user folder
+- [X] Implement command list files inside user folder
 
 # How to Contributing
 
