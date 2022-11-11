@@ -27,24 +27,20 @@ public class Program
         public bool Logout { get; set; }
     }
 
-    public static void PrepareEnvironment()
-    {
-        if (!Directory.Exists(rootPath))
-            Directory.CreateDirectory(rootPath);
-
-        if (!Directory.Exists(usersPath))
-            Directory.CreateDirectory(usersPath);
-
-        if (!File.Exists(usersJsonPath))
-            File.Create(usersJsonPath).Close();
-    }
-
     public static void RunOptions(Options opts)
     {
         if (opts.AddUser != null && opts.Password != null)
         {
-            User user = new User(opts.AddUser, opts.Password);
-            user.Save();
+            User user = Auth.GetLoggedUser();
+
+            if (user is null || user.Name != "admin")
+            {
+                Console.WriteLine(">> You are not logged in as admin");
+                return;
+            }
+
+            User newUser = new User(opts.AddUser, opts.Password);
+            newUser.Save();
         }
 
         else if (opts.Login != null && opts.Password != null)
@@ -91,7 +87,7 @@ public class Program
     
     public static void Main(string[] args)
     {
-        PrepareEnvironment();
+        PrepareEnvironment.run();
 
         Parser.Default.ParseArguments<Options>(args)
             .WithParsed(RunOptions);

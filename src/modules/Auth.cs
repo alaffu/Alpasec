@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-public class Auth
+static class Auth
 {
     private static bool LoggedUserExits()
     {

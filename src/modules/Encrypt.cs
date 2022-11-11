@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-public static class Encrypt
+static class Encrypt
 {
     public static string GetPythonPath()
     {
