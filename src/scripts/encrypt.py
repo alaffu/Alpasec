@@ -25,7 +25,7 @@ class Encrypt:
         with open(file_path, 'rb') as file:
             content_file = file.read()
 
-        if content_file.startswith(b'gAAAAA'):
+        if (content_file.startswith(b'gAAAAA')):
             return True
         else:
             return False
