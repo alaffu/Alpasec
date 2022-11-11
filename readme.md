@@ -29,6 +29,7 @@ AlpaSec.Cli aims to protect files and their respective data stored locally by us
 | alpasec --logout | Logout User | None |
 | alpasec [--no-move] --encrypt {FileName} | Encrypts a file | User |
 | alpasec --decrypt {FileName} | Decrypts a file | User |
+| alpasec --list-users | List all users | None |
 | alpasec --list | List files in user folder | User |
 | alpasec --help | Shows all arguments | None |
 | alpasec --version | Shows Alpasec current version | None |
@@ -36,7 +37,7 @@ AlpaSec.Cli aims to protect files and their respective data stored locally by us
 ## ToDo
 
 - [X] Write all commands in Readme
-- [ ] Implement command to list users
+- [X] Implement command to list users
 - [ ] Implement command to change users
 - [X] Implement command list files inside user folder
 

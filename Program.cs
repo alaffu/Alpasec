@@ -17,6 +17,9 @@ public class Program
         [Option('p', "password", Required = false, HelpText = "Password for user")]
         public string? Password { get; set; }
 
+        [Option('g', "logout", Required = false, HelpText = "Logout user")]
+        public bool Logout { get; set; }
+
         [Option('e', "encrypt", Required = false, HelpText = "Encrypt existing files")]
         public string? Encrypt { get; set; }
 
@@ -26,8 +29,8 @@ public class Program
         [Option('d', "decrypt", Required = false, HelpText = "Decrypt existing files")]
         public string? Decrypt { get; set; }
 
-        [Option('g', "logout", Required = false, HelpText = "Logout user")]
-        public bool Logout { get; set; }
+        [Option('u', "list-users", Required = false, HelpText = "List all users")]
+        public bool ListUsers { get; set; }
 
         [Option('t', "list", Required = false, HelpText = "List files in user folder")]
         public bool List { get; set; }
@@ -94,6 +97,11 @@ public class Program
         else if (opts.Logout)
         {
             Auth.Logout();
+        }
+
+        else if (opts.ListUsers)
+        {
+            Auth.ListUsers();
         }
 
         else if (opts.List)

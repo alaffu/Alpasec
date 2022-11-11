@@ -92,4 +92,21 @@ static class Auth
             }
         }
     }
+
+    public static void ListUsers()
+    {
+        string json = File.ReadAllText(Program.usersJsonPath);
+        List<User> usersList = JsonConvert.DeserializeObject<List<User>>(json);
+
+        Console.WriteLine(">> Users:");
+        if (usersList != null) {
+            foreach (User user in usersList)
+            {
+                if (user.IsLoggedIn)
+                    Console.WriteLine($"   {user.Name} (Logged)");
+                else
+                    Console.WriteLine($"   {user.Name}");
+            }
+        }
+    }
 }
