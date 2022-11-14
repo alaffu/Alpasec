@@ -8,7 +8,7 @@ public class User
     public bool IsAdministrator { get; set; }
     private string UserPath { get; set; }
 
-    private bool UserAlreadyExists()
+    public bool UserAlreadyExists()
     {
         string json = File.ReadAllText(Program.usersJsonPath);
         List<User> usersList = JsonConvert.DeserializeObject<List<User>>(json);

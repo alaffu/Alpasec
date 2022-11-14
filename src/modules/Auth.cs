@@ -30,8 +30,14 @@ static class Auth
         {
             foreach (User user in usersList)
             {
-                if (user.IsLoggedIn)
-                    return user;
+                if (user.IsLoggedIn && user.IsAdministrator)
+                {
+                  Administrator admin =  new Administrator(user.Name, user.Password);
+                    return admin;
+                }else if (user.IsLoggedIn && !user.IsAdministrator)
+                {
+                   return user;
+                }
             }
         }
 
@@ -49,7 +55,8 @@ static class Auth
         string json = File.ReadAllText(Program.usersJsonPath);
         List<User> usersList = JsonConvert.DeserializeObject<List<User>>(json);
 
-        if (usersList != null) {
+        if (usersList != null)
+        {
             foreach (User user in usersList)
             {
                 if (user.Name == username && user.Password == password)
@@ -99,7 +106,8 @@ static class Auth
         List<User> usersList = JsonConvert.DeserializeObject<List<User>>(json);
 
         Console.WriteLine(">> Users:");
-        if (usersList != null) {
+        if (usersList != null)
+        {
             foreach (User user in usersList)
             {
                 if (user.IsLoggedIn)

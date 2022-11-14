@@ -48,16 +48,19 @@ public class Program
 ");
         if (opts.AddUser != null && opts.Password != null)
         {
-            User user = Auth.GetLoggedUser();
+            var user = Auth.GetLoggedUser();
 
-            if (user is null || !user.IsAdministrator)
+            if (user is Administrator)
+            {
+                User newUser = new User(opts.AddUser, opts.Password, false);
+                newUser.Save();
+            }
+            else
             {
                 Console.WriteLine(">> You are not logged in as admin");
                 return;
             }
 
-            User newUser = new User(opts.AddUser, opts.Password, false);
-            newUser.Save();
         }
 
         else if (opts.Login != null && opts.Password != null)
@@ -116,12 +119,13 @@ public class Program
 
             user.ListFiles();
         }
-        
-        else {
+
+        else
+        {
             Console.WriteLine(">> No arguments passed or the command is incomplete");
         }
     }
-    
+
     public static void Main(string[] args)
     {
         PrepareEnvironment.run();
