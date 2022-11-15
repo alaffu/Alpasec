@@ -1,9 +1,11 @@
 using Newtonsoft.Json;
+
 class Administrator : User
 {
-    new public void Save()
+
+    public void Save(User newUser)
     {
-        if (!UserAlreadyExists())
+        if (!newUser.AlreadyExists())
         {
             List<User> usersList = new List<User>();
 
@@ -12,7 +14,7 @@ class Administrator : User
             if (json != "")
                 usersList = JsonConvert.DeserializeObject<List<User>>(json);
 
-            usersList?.Add(this);
+            usersList?.Add(newUser);
 
             File.WriteAllText(Program.usersJsonPath, JsonConvert.SerializeObject(usersList));
             Console.WriteLine(">> User added");

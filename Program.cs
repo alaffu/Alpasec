@@ -52,8 +52,10 @@ public class Program
 
             if (user is Administrator)
             {
+                Administrator loggedAdmin = new Administrator(user.Name, user.Password);
                 User newUser = new User(opts.AddUser, opts.Password, false);
-                newUser.Save();
+
+                loggedAdmin.Save(newUser);
             }
             else
             {
