@@ -75,4 +75,35 @@ public class User
         IsAdministrator = isAdministrator;
         UserPath = Path.Combine(Program.usersPath, Name);
     }
+
+    public static int? SearchJsonIndex(string username)
+    {
+        string json = File.ReadAllText(Program.usersJsonPath);
+        List<User> usersList = JsonConvert.DeserializeObject<List<User>>(json);
+
+        for (int i = 0; i < usersList.Capacity; i++)
+        {
+            if (usersList[i].Name == username)
+            {
+                return i;
+            }
+        }
+
+        return null;
+    }
+
+    public static User? Search(string username)
+    {
+        string json = File.ReadAllText(Program.usersJsonPath);
+        List<User> usersList = JsonConvert.DeserializeObject<List<User>>(json);
+
+        foreach (User user in usersList)
+        {
+            if (user.Name == username)
+            {
+                return user;
+            }
+        }
+        return null;
+    }
 }
