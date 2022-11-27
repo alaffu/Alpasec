@@ -34,6 +34,12 @@ public class Program
 
         [Option('t', "list", Required = false, HelpText = "List files in user folder")]
         public bool List { get; set; }
+
+        [Option('e', "change-user", Required = false, HelpText = "test module shouldnt be used in production")]
+        public string? ChangeUser { get; set; }
+
+        [Option('e', "new-name", Required = false, HelpText = "test module shouldnt be used in production")]
+        public string? NewName { get; set; }
     }
 
     public static void RunOptions(Options opts)
@@ -120,6 +126,13 @@ public class Program
             }
 
             user.ListFiles();
+        }
+
+        else if (opts.ChangeUser != null && opts.NewName != null)
+        {
+            Administrator.ChangeUser(opts.ChangeUser, opts.NewName);
+            Console.WriteLine(opts.ChangeUser);
+            Console.WriteLine(opts.NewName);
         }
 
         else
