@@ -76,7 +76,7 @@ public class User
         UserPath = Path.Combine(Program.usersPath, Name);
     }
 
-    public static int? SearchJsonIndex(string username)
+    public static int? SearchJsonIndexUser(string username)
     {
         string json = File.ReadAllText(Program.usersJsonPath);
         List<User> usersList = JsonConvert.DeserializeObject<List<User>>(json);
@@ -84,6 +84,22 @@ public class User
         for (int i = 0; i < usersList.Capacity; i++)
         {
             if (usersList[i].Name == username)
+            {
+                return i;
+            }
+        }
+
+        return null;
+    }
+
+    public int? SearchJsonIndex()
+    {
+        string json = File.ReadAllText(Program.usersJsonPath);
+        List<User> usersList = JsonConvert.DeserializeObject<List<User>>(json);
+
+        for (int i = 0; i < usersList.Capacity; i++)
+        {
+            if (usersList[i].Name == this.Name)
             {
                 return i;
             }
