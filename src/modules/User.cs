@@ -8,40 +8,21 @@ public class User
     public bool IsAdministrator { get; set; }
     private string UserPath { get; set; }
 
-    private bool UserAlreadyExists()
+    public bool AlreadyExists()
     {
         string json = File.ReadAllText(Program.usersJsonPath);
         List<User> usersList = JsonConvert.DeserializeObject<List<User>>(json);
 
         if (usersList != null)
         {
-            foreach (User user in usersList) {
+            foreach (User user in usersList)
+            {
                 if (user.Name == this.Name)
                     return true;
             }
         }
 
         return false;
-    }
-
-    public void Save()
-    {
-        if (!UserAlreadyExists())
-        {
-            List<User> usersList = new List<User>();
-
-            string json = File.ReadAllText(Program.usersJsonPath);
-
-            if (json != "")
-                usersList = JsonConvert.DeserializeObject<List<User>>(json);
-            
-            usersList.Add(this);
-            
-            File.WriteAllText(Program.usersJsonPath, JsonConvert.SerializeObject(usersList));
-            Console.WriteLine(">> User added");
-        } else {
-            Console.WriteLine(">> User already exists");
-        }
     }
 
     public void MoveFile(string result, string file)
@@ -55,9 +36,12 @@ public class User
         string filePath = Path.Combine(System.IO.Directory.GetCurrentDirectory(), file);
         string newFilePath = Path.Combine(UserPath, file);
 
-        try {
+        try
+        {
             System.IO.File.Move(filePath, newFilePath);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             Console.WriteLine(">> A file with this name already exists in your user folder");
         }
     }
@@ -70,7 +54,7 @@ public class User
             return;
         }
 
-        string [] fileEntries = Directory.GetFiles(UserPath);
+        string[] fileEntries = Directory.GetFiles(UserPath);
 
         if (fileEntries.Length == 0)
         {
@@ -90,5 +74,52 @@ public class User
         IsLoggedIn = false;
         IsAdministrator = isAdministrator;
         UserPath = Path.Combine(Program.usersPath, Name);
+    }
+
+    public static int? SearchJsonIndexUser(string username)
+    {
+        string json = File.ReadAllText(Program.usersJsonPath);
+        List<User> usersList = JsonConvert.DeserializeObject<List<User>>(json);
+
+        for (int i = 0; i < usersList.Capacity; i++)
+        {
+            if (usersList[i].Name == username)
+            {
+                return i;
+            }
+        }
+
+        return null;
+    }
+
+    public int? SearchJsonIndex()
+    {
+        string json = File.ReadAllText(Program.usersJsonPath);
+        List<User> usersList = JsonConvert.DeserializeObject<List<User>>(json);
+
+        for (int i = 0; i < usersList.Capacity; i++)
+        {
+            if (usersList[i].Name == this.Name)
+            {
+                return i;
+            }
+        }
+
+        return null;
+    }
+
+    public static User? Search(string username)
+    {
+        string json = File.ReadAllText(Program.usersJsonPath);
+        List<User> usersList = JsonConvert.DeserializeObject<List<User>>(json);
+
+        foreach (User user in usersList)
+        {
+            if (user.Name == username)
+            {
+                return user;
+            }
+        }
+        return null;
     }
 }

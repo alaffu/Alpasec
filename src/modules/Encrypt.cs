@@ -17,7 +17,8 @@ static class Encrypt
 
     public static string RunPython(string action, string fileName, string password)
     {
-        try {
+        try
+        {
             string PYTHON_PATH = GetPythonPath();
 
             string SCRIPT_RELATIVE_PATH = Path.Combine(Program.rootPath, "scripts/encrypt.py");
@@ -35,15 +36,17 @@ static class Encrypt
                     string stderr = process.StandardError.ReadToEnd();
                     string result = reader.ReadToEnd();
 
-                    if (stderr != "") 
+                    if (stderr != "")
                         Console.WriteLine($">> {stderr}");
-                    if (result != "") 
+                    if (result != "")
                         Console.WriteLine(result);
 
                     return result;
                 }
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             Console.WriteLine($">> {e.Message}");
             return "";
         }
