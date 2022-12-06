@@ -1,5 +1,6 @@
 ﻿using CommandLine;
 
+
 public class Program
 {
     public static string rootPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Alpasec");
@@ -35,12 +36,17 @@ public class Program
         [Option('t', "list", Required = false, HelpText = "List files in user folder")]
         public bool List { get; set; }
 
-        [Option('e', "change-user", Required = false, HelpText = "test module shouldnt be used in production")]
+        [Option('e', "change-user", Required = false, HelpText = "change the user needs to specify username")]
         public string? ChangeUser { get; set; }
 
         [Option('e', "new-name", Required = false, HelpText = "test module shouldnt be used in production")]
         public string? NewName { get; set; }
+
+        [Option('x', "test", Required = false, HelpText = "test module shouldnt be used in production")]
+        public string? Test { get; set; }
     }
+
+
 
     public static void RunOptions(Options opts)
     {
@@ -52,93 +58,24 @@ public class Program
 /_/  |_/_/ .___/\__,_//____/\___/\___(_)____/_/_/   
         /_/                                         
 ");
-        if (opts.AddUser != null && opts.Password != null)
+
+        var user = Auth.GetLoggedUser();
+
+        if (user is Administrator)
         {
-            var user = Auth.GetLoggedUser();
-
-            if (user is Administrator)
-            {
-                Administrator loggedAdmin = new Administrator(user.Name, user.Password);
-                User newUser = new User(opts.AddUser, opts.Password, false);
-
-                loggedAdmin.Save(newUser);
-            }
-            else
-            {
-                Console.WriteLine(">> You are not logged in as admin");
-                return;
-            }
-
+            Administrator loggedAdmin = new Administrator(user.Name, user.Password);
+            new AdministratorOptionsHandler(opts, loggedAdmin, user);
         }
-
-        else if (opts.Login != null && opts.Password != null)
+        else if (user is not Administrator)
         {
-            Auth.Login(opts.Login, opts.Password);
+            new UserOptionsHandler(opts, user);
+            return;
         }
-
-        else if (opts.Encrypt != null)
-        {
-            User user = Auth.GetLoggedUser();
-
-            if (user is null)
-            {
-                Console.WriteLine(">> You must be logged in to perform this action");
-                return;
-            }
-
-            string result = Encrypt.RunPython("encrypt", opts.Encrypt, user.Password);
-
-            if (!opts.NoMove)
-                user.MoveFile(result, opts.Encrypt);
-        }
-
-        else if (opts.Decrypt != null)
-        {
-            User user = Auth.GetLoggedUser();
-
-            if (user == null)
-            {
-                Console.WriteLine(">> You must be logged in to perform this action");
-                return;
-            }
-
-            Encrypt.RunPython("decrypt", opts.Decrypt, user.Password);
-        }
-
-        else if (opts.Logout)
-        {
-            Auth.Logout();
-        }
-
-        else if (opts.ListUsers)
-        {
-            Auth.ListUsers();
-        }
-
-        else if (opts.List)
-        {
-            User user = Auth.GetLoggedUser();
-
-            if (user == null)
-            {
-                Console.WriteLine(">> You must be logged in to perform this action");
-                return;
-            }
-
-            user.ListFiles();
-        }
-
-        else if (opts.ChangeUser != null && opts.NewName != null)
-        {
-            Administrator.ChangeUser(opts.ChangeUser, opts.NewName);
-            Console.WriteLine(opts.ChangeUser);
-            Console.WriteLine(opts.NewName);
-        }
-
         else
         {
             Console.WriteLine(">> No arguments passed or the command is incomplete");
         }
+
     }
 
     public static void Main(string[] args)
