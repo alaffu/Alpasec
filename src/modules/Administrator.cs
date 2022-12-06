@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-class Administrator : User
+public class Administrator : User
 {
 
     public void Save(User newUser)
@@ -25,14 +25,14 @@ class Administrator : User
         }
     }
 
-    public static void ChangeUser(string username, string newUsername)
+    public void ChangeUser(string username, string newUsername)
     {
         // remember to check if there is a user logged
         var loggedUser = Auth.GetLoggedUser();
 
         void changeNameJsonFile(string name, string newName, string passwordFuture = "")
         {
-            var userToChangeIndex = User.SearchJsonIndex(name);
+            var userToChangeIndex = User.SearchJsonIndexUser(name);
 
             string userJsonFile = File.ReadAllText(Program.usersJsonPath);
             dynamic userJson = JsonConvert.DeserializeObject(userJsonFile);
@@ -59,12 +59,10 @@ class Administrator : User
             Directory.Move(pathUserDirectory, newPathUserDirectory);
         }
 
-        // string nameChange = "changed_name";
-        // string name = "new_user";
-
         User? user = User.Search(username);
 
         changeNameJsonFile(username, newUsername);
+
         if (user?.Name != null)
         {
             renameUserDirectory(user?.Name, newUsername);
@@ -73,22 +71,50 @@ class Administrator : User
 
     }
 
-    public void deleteUser(string username)
+    private void deleteUserDirectory(User user)
     {
-        // delete directory user
-
-        User? user = User.Search(username);
         string pathUserDirectory = Program.usersPath + "/" + user.Name;
         if (Directory.Exists(pathUserDirectory))
         {
-          Directory.Delete(pathUserDirectory);
-        }else{
-          Console.WriteLine($">> The directory: {pathUserDirectory}\n does not exist");
+            Boolean deleteEvenIfNotEmpty = true;
+            Directory.Delete(pathUserDirectory, deleteEvenIfNotEmpty);
+        }
+        // else
+        // {
+        //     Console.WriteLine($">> The directory: {pathUserDirectory}\n does not exist");
+        // }
+    }
+
+    public void deleteUser(string username)
+    {
+
+        void deleteUserFromJson(User user)
+        {
+            var userToDeleteIndex = user.SearchJsonIndex();
+
+            string userJsonFile = File.ReadAllText(Program.usersJsonPath);
+            dynamic userJson = JsonConvert.DeserializeObject(userJsonFile);
+            Console.WriteLine(userJson.GetType());
+
+            if (userToDeleteIndex != null)
+            {
+                userJson[userToDeleteIndex].Remove();
+                string output = JsonConvert.SerializeObject(userJson);
+                File.WriteAllText(Program.usersJsonPath, output);
+            }
         }
 
-        // string newPathUserDirectory = Program.usersPath + "/" + newName;
-
-        // delete login register
+        User? user = User.Search(username);
+        if (user != null)
+        {
+            deleteUserFromJson(user);
+            deleteUserDirectory(user);
+            Console.WriteLine("Usuário deletado com sucesso");
+        }
+        else
+        {
+            Console.WriteLine(">> Nome do usuário incorreto ou inexistente");
+        }
     }
 
     public Administrator(string name, string password) : base(name, password, true)
