@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-static class Auth
+public static class Auth
 {
     private static bool LoggedUserExits()
     {
@@ -32,11 +32,12 @@ static class Auth
             {
                 if (user.IsLoggedIn && user.IsAdministrator)
                 {
-                  Administrator admin =  new Administrator(user.Name, user.Password);
+                    Administrator admin = new Administrator(user.Name, user.Password);
                     return admin;
-                }else if (user.IsLoggedIn && !user.IsAdministrator)
+                }
+                else if (user.IsLoggedIn && !user.IsAdministrator)
                 {
-                   return user;
+                    return user;
                 }
             }
         }
