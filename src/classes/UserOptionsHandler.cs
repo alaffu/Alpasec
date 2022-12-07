@@ -108,7 +108,8 @@ public class UserOptionsHandler
         {
             Auth.Login(options.Login, options.Password);
             status++;
-        } else if (options.ListUsers)
+        }
+        else if (options.ListUsers)
         {
             Auth.ListUsers();
             status++;
@@ -116,7 +117,7 @@ public class UserOptionsHandler
 
         return status;
     }
-    public static UserOptionsHandler Start(Program.Options opts, User user, int statusHowManyOptionsRun=0)
+    public static UserOptionsHandler Start(Program.Options opts, User user, int statusHowManyOptionsRun = 0)
     {
         return new UserOptionsHandler(opts, user, statusHowManyOptionsRun);
     }
@@ -134,7 +135,7 @@ public class UserOptionsHandler
 
         if (statusHowManyOptionsRun == 0)
         {
-            Console.WriteLine(">> No arguments passed or you are not logged in");
+            Console.WriteLine(">> No arguments passed or you don't have this permission level");
         }
     }
 }

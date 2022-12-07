@@ -36,9 +36,9 @@ public class Administrator : User
 
             if (userToChangeIndex != null)
             {
-                if (newPass != "")
+                if (newPass != null)
                     userJson[userToChangeIndex].Password = newPass;
-                if (newName != "")
+                if (newName != null)
                     userJson[userToChangeIndex].Name = newName;
 
                 string output = JsonConvert.SerializeObject(userJson);
@@ -53,17 +53,27 @@ public class Administrator : User
             string pathUserDirectory = Program.usersPath + "/" + name;
             string newPathUserDirectory = Program.usersPath + "/" + newName;
 
-            Directory.Move(pathUserDirectory, newPathUserDirectory);
+            if (Directory.Exists(pathUserDirectory))
+            {
+                Directory.Move(pathUserDirectory, newPathUserDirectory);
+            }
         }
 
         User? user = User.Search(username);
 
-        changeUserJsonFile(username, newUsername, newPassword);
-
-        Console.WriteLine("Chegou aqui >>");
-        if (user?.Name != null && newUsername != "" && user?.Name != newUsername)
+        try
         {
-            Console.WriteLine(">> Renaming user directory");
+            changeUserJsonFile(username, newUsername, newPassword);
+        }
+        catch
+        {
+            Console.WriteLine(">> User does not exist");
+
+        }
+
+
+        if (user?.Name != null && newUsername != null && user?.Name != newUsername)
+        {
             renameUserDirectory(user?.Name, newUsername);
         }
 
@@ -99,11 +109,15 @@ public class Administrator : User
         }
 
         User? user = User.Search(username);
-        if (user != null)
+        if (user != null && !user.IsAdministrator)
         {
             deleteUserFromJson(user);
             deleteUserDirectory(user);
             Console.WriteLine(">> User deleted");
+        }
+        else if (user.IsAdministrator)
+        {
+            Console.WriteLine(">> User is an administrator");
         }
         else
         {
