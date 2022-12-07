@@ -41,14 +41,13 @@ public class UserOptionsHandler
 
     private Boolean IsTryingLogout()
     {
-
-        if (options.Logout != null)
+        if (options.Logout)
         {
-            return false;
+            return true;
         }
         else
         {
-            return true;
+            return false;
         }
 
     }
@@ -109,9 +108,7 @@ public class UserOptionsHandler
         {
             Auth.Login(options.Login, options.Password);
             status++;
-        }
-
-        if (options.ListUsers)
+        } else if (options.ListUsers)
         {
             Auth.ListUsers();
             status++;
@@ -130,19 +127,14 @@ public class UserOptionsHandler
 
         if (user != null && user.IsLoggedIn)
         {
-            statusHowManyOptionsRun = LoggedUserOptionsHandler(user);
+            statusHowManyOptionsRun += LoggedUserOptionsHandler(user);
         }
 
         statusHowManyOptionsRun += NoPermissionsOptionsHandler();
 
         if (statusHowManyOptionsRun == 0)
         {
-            Console.WriteLine(">> No arguments passed or the command is incomplete");
+            Console.WriteLine(">> No arguments passed or you are not logged in");
         }
-        // if (statusHowManyOptionsRun == 0)
-        // {
-        //     Console.WriteLine(">> Must be logged in to perform this action");
-        // }
-
     }
 }

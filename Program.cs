@@ -36,20 +36,22 @@ public class Program
         [Option('t', "list", Required = false, HelpText = "List files in user folder")]
         public bool List { get; set; }
 
-        [Option('e', "change-user", Required = false, HelpText = "Change the user needs to specify username")]
+        [Option('e', "change-user", Required = false, HelpText = "Change the user")]
         public string? ChangeUser { get; set; }
 
-        [Option('e', "new-name", Required = false, HelpText = "Set new username")]
+        [Option('e', "new-name", Required = false, HelpText = "Set new username with change user")]
         public string? NewName { get; set; }
 
-        [Option('x', "test", Required = false, HelpText = "test module shouldnt be used in production")]
-        public string? Test { get; set; }
+        [Option('e', "new-password", Required = false, HelpText = "Set new password with change user")]
+        public string? NewPassword { get; set; }
+
+        [Option('x', "delete-user", Required = false, HelpText = "Remove user")]
+        public string? DeleteUser { get; set; }
     }
-
-
 
     public static void RunOptions(Options opts)
     {
+        // Console.Clear();
         Console.WriteLine(@"
     ___    __            _____            _________ 
    /   |  / /___  ____ _/ ___/___  _____ / ____/ (_)
@@ -64,13 +66,10 @@ public class Program
         if (user is Administrator)
         {
             Administrator loggedAdmin = new Administrator(user.Name, user.Password);
-            // new AdministratorOptionsHandler(opts, loggedAdmin, user);
             AdministratorOptionsHandler.Start(opts, loggedAdmin, user);
-
         }
         else if (user is not Administrator)
         {
-            // new UserOptionsHandler(opts, user);
             UserOptionsHandler.Start(opts, user);
             return;
         }
