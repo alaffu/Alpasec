@@ -87,7 +87,6 @@ public class User
         Name = name;
         Password = password;
 
-        // IsLoggedIn = IsUserLogged(name);
         IsLoggedIn = false;
         IsAdministrator = isAdministrator;
         UserPath = Path.Combine(Program.usersPath, Name);

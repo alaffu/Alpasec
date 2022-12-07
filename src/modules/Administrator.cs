@@ -27,23 +27,20 @@ public class Administrator : User
 
     public void ChangeUser(string username, string newUsername, string newPassword)
     {
-        // remember to check if there is a user logged
-        var loggedUser = Auth.GetLoggedUser();
-
-        void changeNameJsonFile(string name, string newName, string passwordFuture = "")
+        void changeUserJsonFile(string name, string newName, string newPass)
         {
             var userToChangeIndex = User.SearchJsonIndexUser(name);
 
             string userJsonFile = File.ReadAllText(Program.usersJsonPath);
             dynamic userJson = JsonConvert.DeserializeObject(userJsonFile);
 
-            // string name = "changed_name";
-            // string password = "changed_password";
-
-            // raise error if there the program dont find the user
             if (userToChangeIndex != null)
             {
-                userJson[userToChangeIndex].Name = newName;
+                if (newPass != "")
+                    userJson[userToChangeIndex].Password = newPass;
+                if (newName != "")
+                    userJson[userToChangeIndex].Name = newName;
+
                 string output = JsonConvert.SerializeObject(userJson);
                 File.WriteAllText(Program.usersJsonPath, output);
 
@@ -61,13 +58,14 @@ public class Administrator : User
 
         User? user = User.Search(username);
 
-        changeNameJsonFile(username, newUsername);
+        changeUserJsonFile(username, newUsername, newPassword);
 
-        if (user?.Name != null)
+        Console.WriteLine("Chegou aqui >>");
+        if (user?.Name != null && newUsername != "" && user?.Name != newUsername)
         {
+            Console.WriteLine(">> Renaming user directory");
             renameUserDirectory(user?.Name, newUsername);
         }
-
 
     }
 
@@ -91,7 +89,6 @@ public class Administrator : User
 
             string userJsonFile = File.ReadAllText(Program.usersJsonPath);
             dynamic userJson = JsonConvert.DeserializeObject(userJsonFile);
-            Console.WriteLine(userJson.GetType());
 
             if (userToDeleteIndex != null)
             {
