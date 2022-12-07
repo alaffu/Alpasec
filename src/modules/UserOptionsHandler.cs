@@ -44,11 +44,11 @@ public class UserOptionsHandler
 
         if (options.Logout != null)
         {
-            return true;
+            return false;
         }
         else
         {
-            return false;
+            return true;
         }
 
     }
@@ -77,29 +77,29 @@ public class UserOptionsHandler
 
     private int LoggedUserOptionsHandler(User user)
     {
-        int status = 0;
+        int run = 0;
         if (IsTryingEncrypt())
         {
             EncryptFile(user);
-            status++;
+            run++;
         }
 
         else if (IsTryingDecrypt())
         {
             Encrypt.RunPython("decrypt", options.Decrypt, user.Password);
-            status++;
+            run++;
         }
         else if (IsTryingLogout())
         {
             Auth.Logout();
-            status++;
+            run++;
         }
         else if (IsTryingListFiles())
         {
             user.ListFiles();
-            status++;
+            run++;
         }
-        return status;
+        return run;
 
     }
     private int NoPermissionsOptionsHandler()
@@ -119,25 +119,30 @@ public class UserOptionsHandler
 
         return status;
     }
+    public static UserOptionsHandler Start(Program.Options opts, User user, int statusHowManyOptionsRun=0)
+    {
+        return new UserOptionsHandler(opts, user, statusHowManyOptionsRun);
+    }
 
-    public UserOptionsHandler(Program.Options opts, User? user = null)
+    public UserOptionsHandler(Program.Options opts, User user, int statusHowManyOptionsRun = 0)
     {
         options = opts;
-        int statusHowManyOptionsRun = 0;
 
-        if (user != null)
+        if (user != null && user.IsLoggedIn)
         {
-            if (user.IsLoggedIn)
-            {
-                statusHowManyOptionsRun = LoggedUserOptionsHandler(user);
-            }
+            statusHowManyOptionsRun = LoggedUserOptionsHandler(user);
         }
 
         statusHowManyOptionsRun += NoPermissionsOptionsHandler();
+
         if (statusHowManyOptionsRun == 0)
         {
-            Console.WriteLine(">> Must be logged in to perform this action");
+            Console.WriteLine(">> No arguments passed or the command is incomplete");
         }
+        // if (statusHowManyOptionsRun == 0)
+        // {
+        //     Console.WriteLine(">> Must be logged in to perform this action");
+        // }
 
     }
 }

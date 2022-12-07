@@ -36,10 +36,10 @@ public class Program
         [Option('t', "list", Required = false, HelpText = "List files in user folder")]
         public bool List { get; set; }
 
-        [Option('e', "change-user", Required = false, HelpText = "change the user needs to specify username")]
+        [Option('e', "change-user", Required = false, HelpText = "Change the user needs to specify username")]
         public string? ChangeUser { get; set; }
 
-        [Option('e', "new-name", Required = false, HelpText = "test module shouldnt be used in production")]
+        [Option('e', "new-name", Required = false, HelpText = "Set new username")]
         public string? NewName { get; set; }
 
         [Option('x', "test", Required = false, HelpText = "test module shouldnt be used in production")]
@@ -64,16 +64,15 @@ public class Program
         if (user is Administrator)
         {
             Administrator loggedAdmin = new Administrator(user.Name, user.Password);
-            new AdministratorOptionsHandler(opts, loggedAdmin, user);
+            // new AdministratorOptionsHandler(opts, loggedAdmin, user);
+            AdministratorOptionsHandler.Start(opts, loggedAdmin, user);
+
         }
         else if (user is not Administrator)
         {
-            new UserOptionsHandler(opts, user);
+            // new UserOptionsHandler(opts, user);
+            UserOptionsHandler.Start(opts, user);
             return;
-        }
-        else
-        {
-            Console.WriteLine(">> No arguments passed or the command is incomplete");
         }
 
     }

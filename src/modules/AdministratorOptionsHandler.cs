@@ -60,25 +60,34 @@ public class AdministratorOptionsHandler
         admin.deleteUser(options.Test);
     }
 
+    public static AdministratorOptionsHandler Start(Program.Options opts, Administrator admin, User user)
+    {
+        return new AdministratorOptionsHandler(opts, admin, user);
+    }
+
     public AdministratorOptionsHandler(Program.Options opts, Administrator admin, User user)
     {
         options = opts;
         this.admin = admin;
+        int statusHowManyOptionRun = 0;
 
         if (IsAddingUser())
         {
             AddUser();
+            statusHowManyOptionRun++;
         }
         else if (IsChangingUser())
         {
             ChangeUser();
+            statusHowManyOptionRun++;
         }
         else if (isDeletingUser())
         {
             DeleteUser();
+            statusHowManyOptionRun++;
         }
 
-        new UserOptionsHandler(opts, user);
+        // new UserOptionsHandler(opts, user, statusHowManyOptionRun);
+        UserOptionsHandler.Start(opts, user, statusHowManyOptionRun);
     }
-
 }
