@@ -4,6 +4,7 @@ public class User
 {
     public string Name { get; set; }
     public string Password { get; set; }
+    public string Key { get; set; }
     public bool IsLoggedIn { get; set; }
     public bool IsAdministrator { get; set; }
     private string UserPath { get; set; }
@@ -82,10 +83,11 @@ public class User
 
     }
 
-    public User(string name, string password, bool isAdministrator)
+    public User(string name, string password, string key, bool isAdministrator)
     {
         Name = name;
         Password = password;
+        Key = key;
 
         IsLoggedIn = false;
         IsAdministrator = isAdministrator;

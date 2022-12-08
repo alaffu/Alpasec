@@ -32,7 +32,7 @@ public static class Auth
             {
                 if (user.IsLoggedIn && user.IsAdministrator)
                 {
-                    Administrator admin = new Administrator(user.Name, user.Password);
+                    Administrator admin = new Administrator(user.Name, user.Password, user.Key);
                     admin.IsLoggedIn = true;
                     return admin;
                 }

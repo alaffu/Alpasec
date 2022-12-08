@@ -65,7 +65,7 @@ public class Program
 
         if (user is Administrator)
         {
-            Administrator loggedAdmin = new Administrator(user.Name, user.Password);
+            Administrator loggedAdmin = new Administrator(user.Name, user.Password, user.Key);
             AdministratorOptionsHandler.Start(opts, loggedAdmin, user);
         }
         else if (user is not Administrator)

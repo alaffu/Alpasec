@@ -125,9 +125,10 @@ public class Administrator : User
         }
     }
 
-    public Administrator(string name, string password) : base(name, password, true)
+    public Administrator(string name, string password, string key) : base(name, password, key, true)
     {
         Name = name;
         Password = password;
+        Key = key;
     }
 }

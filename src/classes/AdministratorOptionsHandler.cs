@@ -43,7 +43,7 @@ public class AdministratorOptionsHandler
 
     private void AddUser()
     {
-        User newUser = new User(options.AddUser, options.Password, false);
+        User newUser = new User(options.AddUser, options.Password, Guid.NewGuid().ToString(), false);
         admin.Save(newUser);
     }
 

@@ -66,7 +66,7 @@ public class UserOptionsHandler
 
     private void EncryptFile(User user)
     {
-        string result = Encrypt.RunPython("encrypt", options.Encrypt, user.Password);
+        string result = Encrypt.RunPython("encrypt", options.Encrypt, user.Key);
 
         if (!options.NoMove)
         {
@@ -85,7 +85,7 @@ public class UserOptionsHandler
 
         else if (IsTryingDecrypt())
         {
-            Encrypt.RunPython("decrypt", options.Decrypt, user.Password);
+            Encrypt.RunPython("decrypt", options.Decrypt, user.Key);
             run++;
         }
         else if (IsTryingLogout())
