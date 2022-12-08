@@ -21,7 +21,7 @@ AlpaSec.Cli aims to protect files and their respective data stored locally by us
 3. Create in %appdata%/Alpasec a folder named scripts.
 4. Copy the encrypt.py from project and paste inside the scripts folder that was created earlier.  
 
-Important: The encrypt.py use the version `38.0.3` of the `cryptography` library. ~Working not guaranteed in other versions.~
+Important: The encrypt.py use the version `38.0.3` of the `cryptography` library. *Working not guaranteed in other versions.*
 
 
 ## Commands
