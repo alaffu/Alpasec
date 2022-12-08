@@ -1,5 +1,7 @@
 # Alpasec.Cli
 
+![Logo](https://media.discordapp.net/attachments/1011767156951752868/1050272623688421468/image.png?width=350&height=176)
+
 ```
     ___    __            _____            _________ 
    /   |  / /___  ____ _/ ___/___  _____ / ____/ (_)
