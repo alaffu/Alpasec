@@ -19,7 +19,7 @@ public static class Auth
         return false;
     }
 
-    public static User GetLoggedUser()
+    public static User? GetLoggedUser()
     {
         if (!LoggedUserExits()) return null;
 
@@ -33,10 +33,12 @@ public static class Auth
                 if (user.IsLoggedIn && user.IsAdministrator)
                 {
                     Administrator admin = new Administrator(user.Name, user.Password);
+                    admin.IsLoggedIn = true;
                     return admin;
                 }
                 else if (user.IsLoggedIn && !user.IsAdministrator)
                 {
+                    user.IsLoggedIn = true;
                     return user;
                 }
             }

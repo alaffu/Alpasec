@@ -25,27 +25,26 @@ public class Administrator : User
         }
     }
 
-    public void ChangeUser(string username, string newUsername)
+    public void ChangeUser(string username, string newUsername, string newPassword)
     {
-        // remember to check if there is a user logged
-        var loggedUser = Auth.GetLoggedUser();
-
-        void changeNameJsonFile(string name, string newName, string passwordFuture = "")
+        void changeUserJsonFile(string name, string newName, string newPass)
         {
             var userToChangeIndex = User.SearchJsonIndexUser(name);
 
             string userJsonFile = File.ReadAllText(Program.usersJsonPath);
             dynamic userJson = JsonConvert.DeserializeObject(userJsonFile);
 
-            // string name = "changed_name";
-            // string password = "changed_password";
-
-            // raise error if there the program dont find the user
             if (userToChangeIndex != null)
             {
-                userJson[userToChangeIndex].Name = newName;
+                if (newPass != null)
+                    userJson[userToChangeIndex].Password = newPass;
+                if (newName != null)
+                    userJson[userToChangeIndex].Name = newName;
+
                 string output = JsonConvert.SerializeObject(userJson);
                 File.WriteAllText(Program.usersJsonPath, output);
+
+                Console.WriteLine(">> User changed");
             }
         }
 
@@ -54,35 +53,41 @@ public class Administrator : User
             string pathUserDirectory = Program.usersPath + "/" + name;
             string newPathUserDirectory = Program.usersPath + "/" + newName;
 
-            // search file and check if it exists
-            // string[] fileEntries = Directory.GetFiles(Program.usersPath + "/" + user?.Name);
-            Directory.Move(pathUserDirectory, newPathUserDirectory);
+            if (Directory.Exists(pathUserDirectory))
+            {
+                Directory.Move(pathUserDirectory, newPathUserDirectory);
+            }
         }
 
         User? user = User.Search(username);
 
-        changeNameJsonFile(username, newUsername);
+        try
+        {
+            changeUserJsonFile(username, newUsername, newPassword);
+        }
+        catch
+        {
+            Console.WriteLine(">> User does not exist");
 
-        if (user?.Name != null)
+        }
+
+
+        if (user?.Name != null && newUsername != null && user?.Name != newUsername)
         {
             renameUserDirectory(user?.Name, newUsername);
         }
-
 
     }
 
     private void deleteUserDirectory(User user)
     {
         string pathUserDirectory = Program.usersPath + "/" + user.Name;
+
         if (Directory.Exists(pathUserDirectory))
         {
             Boolean deleteEvenIfNotEmpty = true;
             Directory.Delete(pathUserDirectory, deleteEvenIfNotEmpty);
         }
-        // else
-        // {
-        //     Console.WriteLine($">> The directory: {pathUserDirectory}\n does not exist");
-        // }
     }
 
     public void deleteUser(string username)
@@ -94,7 +99,6 @@ public class Administrator : User
 
             string userJsonFile = File.ReadAllText(Program.usersJsonPath);
             dynamic userJson = JsonConvert.DeserializeObject(userJsonFile);
-            Console.WriteLine(userJson.GetType());
 
             if (userToDeleteIndex != null)
             {
@@ -105,15 +109,19 @@ public class Administrator : User
         }
 
         User? user = User.Search(username);
-        if (user != null)
+        if (user != null && !user.IsAdministrator)
         {
             deleteUserFromJson(user);
             deleteUserDirectory(user);
-            Console.WriteLine("Usuário deletado com sucesso");
+            Console.WriteLine(">> User deleted");
+        }
+        else if (user.IsAdministrator)
+        {
+            Console.WriteLine(">> An administrator cannot be deleted");
         }
         else
         {
-            Console.WriteLine(">> Nome do usuário incorreto ou inexistente");
+            Console.WriteLine(">> Missing or Incorrect username");
         }
     }
 

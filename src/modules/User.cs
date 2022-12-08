@@ -67,10 +67,26 @@ public class User
             Console.WriteLine($"   {Path.GetFileName(fileName)}");
     }
 
+    private static Boolean IsUserLogged(string name)
+    {
+        User? loggedUser = Auth.GetLoggedUser();
+
+        if (loggedUser != null && loggedUser.Name == name)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
+    }
+
     public User(string name, string password, bool isAdministrator)
     {
         Name = name;
         Password = password;
+
         IsLoggedIn = false;
         IsAdministrator = isAdministrator;
         UserPath = Path.Combine(Program.usersPath, Name);

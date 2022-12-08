@@ -19,7 +19,7 @@ public class AdministratorOptionsHandler
 
     private Boolean IsChangingUser()
     {
-        if (options.ChangeUser != null && options.NewName != null)
+        if (options.ChangeUser != null && (options.NewName != null || options.NewPassword != null))
         {
             return true;
         }
@@ -31,7 +31,7 @@ public class AdministratorOptionsHandler
 
     private Boolean isDeletingUser()
     {
-        if (options.Test != null)
+        if (options.DeleteUser != null)
         {
             return true;
         }
@@ -49,36 +49,41 @@ public class AdministratorOptionsHandler
 
     private void ChangeUser()
     {
-        admin.ChangeUser(options.ChangeUser, options.NewName);
-        Console.WriteLine(options.ChangeUser);
-        Console.WriteLine(options.NewName);
-
+        admin.ChangeUser(options.ChangeUser, options.NewName, options.NewPassword);
     }
 
     private void DeleteUser()
     {
-        admin.deleteUser(options.Test);
+        admin.deleteUser(options.DeleteUser);
+    }
+
+    public static AdministratorOptionsHandler Start(Program.Options opts, Administrator admin, User user)
+    {
+        return new AdministratorOptionsHandler(opts, admin, user);
     }
 
     public AdministratorOptionsHandler(Program.Options opts, Administrator admin, User user)
     {
         options = opts;
         this.admin = admin;
+        int statusHowManyOptionRun = 0;
 
         if (IsAddingUser())
         {
             AddUser();
+            statusHowManyOptionRun++;
         }
         else if (IsChangingUser())
         {
             ChangeUser();
+            statusHowManyOptionRun++;
         }
         else if (isDeletingUser())
         {
             DeleteUser();
+            statusHowManyOptionRun++;
         }
 
-        new UserOptionsHandler(opts, user);
+        UserOptionsHandler.Start(opts, user, statusHowManyOptionRun);
     }
-
 }
