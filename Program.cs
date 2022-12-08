@@ -24,7 +24,7 @@ public class Program
         [Option('e', "encrypt", Required = false, HelpText = "Encrypt existing files")]
         public string? Encrypt { get; set; }
 
-        [Option('n', "no-move", Required = false, HelpText = "Do not move files")]
+        [Option('n', "no-move", Required = false, HelpText = "Do not move files in encrypt")]
         public bool NoMove { get; set; }
 
         [Option('d', "decrypt", Required = false, HelpText = "Decrypt existing files")]
@@ -51,7 +51,7 @@ public class Program
 
     public static void RunOptions(Options opts)
     {
-        // Console.Clear();
+        Console.Clear();
         Console.WriteLine(@"
     ___    __            _____            _________ 
    /   |  / /___  ____ _/ ___/___  _____ / ____/ (_)

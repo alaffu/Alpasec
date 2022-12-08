@@ -117,7 +117,7 @@ public class Administrator : User
         }
         else if (user.IsAdministrator)
         {
-            Console.WriteLine(">> User is an administrator");
+            Console.WriteLine(">> An administrator cannot be deleted");
         }
         else
         {
